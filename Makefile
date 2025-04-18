@@ -6,6 +6,6 @@ all: $(BUILD_DIR)
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 run:
-	./$(BUILD_DIR)/$(TARGET)
+	GDK_BACKEND=x11 ./$(BUILD_DIR)/$(TARGET)
 clean:
 	rm -rf $(BUILD_DIR)

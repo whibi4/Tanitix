@@ -1,5 +1,6 @@
-#include <iostream>
+#include "visio.h"
 
-int main() {
-    return 0;
+int main(int argc, char** argv) {
+    Visio visio;
+    return visio.run(argc, argv);
 }
