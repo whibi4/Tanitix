@@ -15,4 +15,4 @@ add_subdirectory(space)
 add_subdirectory(visio)
 
 add_executable(${PROJECT_NAME} main.cpp)
-target_link_libraries(${PROJECT_NAME} PRIVATE lib_objects_s lib_interpreter_s lib_rules_s lib_visio_s)
+target_link_libraries(${PROJECT_NAME} PRIVATE lib_interpreter_s lib_space_s lib_visio_s)
