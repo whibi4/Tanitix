@@ -52,8 +52,9 @@ void SpaceManger::execute() {
     motion->configure({
         {"centerX", 300},
         {"centerY", 200},
-        {"angularVelocity", 0.001}
+        {"angularVelocity", 0.002}
     });
+
     initialPosition = Vector2D<double>(400,70);
     object = new PhysicalObject(initialPosition, motion->getMotionFunction());
     addPhysicalObject(object);
