@@ -1,19 +1,22 @@
 #include "visio.h"
 #include "space.h"
 #include "physicalObject.h"
-#include "maths.h"
+ #include "maths.h"
 
 #include <cmath>
 #include <functional>
 int main(int argc, char** argv) {
     SpaceManger spaceManger;
     Vector2D<double> initialPosition(300,300);
+    Vector2D<double> initialPosition2(300,100);
+    Vector2D<double> initialPosition3(550,120);
 
     std::function<Vector2D<double>(Time<double>, Vector2D<double>)> motion = [](Time<double> t, Vector2D<double> previousPosition) -> Vector2D<double>
     {
         const double centerX = 400.0;
         const double centerY = 300.0;
-        const double radius = 100.0;
+        //const double radius = 100.0;
+        const double radius = sqrt(pow((centerX-previousPosition._x),2) + pow((centerY-previousPosition._y),2));
         const double angularSpeed = 0.005; // radians per second
         // Vector from center to previous position
         double dx = previousPosition._x - centerX;
@@ -31,7 +34,11 @@ int main(int argc, char** argv) {
     };
 
     PhysicalObject* object = new PhysicalObject(initialPosition, motion );
+    PhysicalObject* object2 = new PhysicalObject(initialPosition2, motion );
+    PhysicalObject* object3 = new PhysicalObject(initialPosition3, motion );
     spaceManger.addPhysicalObject(object);
+    spaceManger.addPhysicalObject(object2);
+    spaceManger.addPhysicalObject(object3);
     Visio visio(&spaceManger);
     return visio.run(argc, argv);
 }
