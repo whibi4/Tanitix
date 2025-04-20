@@ -49,6 +49,14 @@ void SpaceManger::execute() {
     });
     object = new PhysicalObject(initialPosition, motion->getMotionFunction());
     addPhysicalObject(object);
+    motion->configure({
+        {"centerX", 300},
+        {"centerY", 200},
+        {"angularVelocity", 0.001}
+    });
+    initialPosition = Vector2D<double>(400,70);
+    object = new PhysicalObject(initialPosition, motion->getMotionFunction());
+    addPhysicalObject(object);
     delete motion;
 
     motion= new Linear2DMotion();
@@ -70,7 +78,7 @@ void SpaceManger::collusionTreatement() {
         for (size_t j = i + 1; j < _objects.size(); j++) {
             PhysicalObject* obj2 = _objects[j];
             double distance = obj1->getCurrentPosition().distance(obj2->getCurrentPosition());
-            if (distance <= 50) {
+            if (distance <= 100) {
                 obj1->makeRED();
                 obj2->makeRED();
                 obj1->updateMotion(motion->getMotionFunction());
