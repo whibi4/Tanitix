@@ -14,5 +14,8 @@ target_include_directories(lib_space_s PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/rules
     ${CMAKE_CURRENT_SOURCE_DIR}/physical_object
     ${CMAKE_CURRENT_SOURCE_DIR}/drawable_object
-    ${CMAKE_SOURCE_DIR}/utils/geometric
+    ${CMAKE_SOURCE_DIR}/utils/maths
+    ${CMAKE_SOURCE_DIR}/utils/physics
 )
+add_subdirectory(rules)
+target_link_libraries(lib_space_s PRIVATE lib_rules_s)

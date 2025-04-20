@@ -3,6 +3,7 @@
 
 #include <functional>
 #include "maths.h"
+#include "physics.h"
 #include "drawableObject.h"
 
 class PhysicalObject {
@@ -11,6 +12,14 @@ class PhysicalObject {
         ~PhysicalObject();
         void update(Time<double>);
         DrawableObject* getDrawableObject() const {return _drawableObject;};
+        Vector2D<double> getCurrentPosition() const {return _currentPosition;};
+        void updateMotion(std::function<Vector2D<double>(Time<double>, Vector2D<double>)> motion) {
+            _moveBehavior = motion;
+        }
+        /// debug
+        void makeRED() {
+            _drawableObject->_rgb = {1,0,0};
+        }
     private:
         Vector2D<double>                                                    _currentPosition;
         std::function<Vector2D<double>(Time<double>, Vector2D<double>)>     _moveBehavior;

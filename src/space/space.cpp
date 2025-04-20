@@ -3,6 +3,7 @@
 #include "drawableObject.h"
 #include "physicalObject.h"
 #include "space.h"
+#include "rules.h"
 using namespace std;
 
 namespace {
@@ -31,5 +32,50 @@ vector<DrawableObject*> SpaceManger::getSpaceScene() {
 void SpaceManger::update(Time<double> deltaT) {
     for (auto& object : _objects) {
         object->update(deltaT);
-    }
+    };
+    collusionTreatement();
 };
+
+void SpaceManger::execute() {
+    Motion2D* motion;
+    Vector2D<double> initialPosition;
+    PhysicalObject* object;
+    motion= new Circular2DMotion();
+    initialPosition = Vector2D<double>(550,120);
+    motion->configure({
+        {"centerX", 400},
+        {"centerY", 300},
+        {"angularVelocity", 0.005}
+    });
+    object = new PhysicalObject(initialPosition, motion->getMotionFunction());
+    addPhysicalObject(object);
+    delete motion;
+
+    motion= new Linear2DMotion();
+    initialPosition = Vector2D<double>(0,0);
+    motion->configure({
+        {"velocity", 0.1}
+    });
+    object = new PhysicalObject(initialPosition, motion->getMotionFunction());
+    addPhysicalObject(object);
+    delete motion;
+};
+
+void SpaceManger::collusionTreatement() {
+    Motion2D* motion;
+    motion= new Constant2dMotion();
+    motion->configure({});
+    for (size_t i = 0; i < _objects.size() - 1; i++) {
+        PhysicalObject* obj1 = _objects[i];
+        for (size_t j = i + 1; j < _objects.size(); j++) {
+            PhysicalObject* obj2 = _objects[j];
+            double distance = obj1->getCurrentPosition().distance(obj2->getCurrentPosition());
+            if (distance <= 50) {
+                obj1->makeRED();
+                obj2->makeRED();
+                obj1->updateMotion(motion->getMotionFunction());
+                obj2->updateMotion(motion->getMotionFunction());
+            }
+        };
+    }
+}
