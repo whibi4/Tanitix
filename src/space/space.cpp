@@ -1,6 +1,7 @@
 #include <iostream>
 #include <random>
 #include "drawableObject.h"
+#include "physicalObject.h"
 #include "space.h"
 using namespace std;
 
@@ -21,18 +22,14 @@ namespace {
 
 vector<DrawableObject*> SpaceManger::getSpaceScene() {
     vector<DrawableObject*> result;
-    int maxCount = random_int(4,10);
-    size_t count = 0;
-    while(true) {
-        if (count > maxCount) break;
-        double x = random_double(0, 800);
-        double y = random_double(0, 600);
-        double radius = random_double(10, 50);
-        double r = random_double(0, 1);
-        double g = random_double(0, 1);
-        double b = random_double(0, 1);
-        result.push_back(new DrawableObject(r,g,b,x,y,radius));
-        count ++;
-    }
+    for (auto& object : _objects) {
+        result.push_back(object->getDrawableObject());
+    };
     return result;
-}
+};
+
+void SpaceManger::update(Time<double> deltaT) {
+    for (auto& object : _objects) {
+        object->update(deltaT);
+    }
+};

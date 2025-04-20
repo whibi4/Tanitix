@@ -1,5 +1,16 @@
 #include "visio.h"
 #include "drawableObject.h"
+#include "physicalObject.h"
+#include "space.h"
+namespace VisoUtils {
+    void drawFromDrawable(cairo_t* cr, DrawableObject* drawableObject) {
+        auto [r, g, b] = drawableObject->getRGB();
+        cairo_set_source_rgb(cr, r, g, b);
+        cairo_arc(cr, drawableObject->getPosition()._x, drawableObject->getPosition()._y, drawableObject->getRadius(), 0, 2 * G_PI);
+        cairo_fill(cr);
+    }
+}
+
 Visio::Visio(SpaceManger* spaceManager) : _spaceManager(spaceManager) {
     _app = gtk_application_new("tanitix.gui.physics2d", G_APPLICATION_DEFAULT_FLAGS);
     g_signal_connect(_app, "activate", G_CALLBACK(Visio::on_activate), this);
@@ -25,7 +36,7 @@ void Visio::on_activate(GtkApplication* app, gpointer user_data) {
     gtk_container_add(GTK_CONTAINER(window), self->_drawing_area);
     gtk_widget_show_all(window);
 
-    g_timeout_add(500, Visio::on_timeout, self);
+    g_timeout_add(16, Visio::on_timeout, self);
 }
 
 gboolean Visio::on_draw(GtkWidget* widget, cairo_t* cr, gpointer user_data) {
@@ -41,10 +52,7 @@ gboolean Visio::on_draw(GtkWidget* widget, cairo_t* cr, gpointer user_data) {
 
      // Draw each circle
      for (auto& drawableObject : spaceManager->getSpaceScene()) {
-        auto [r, g, b] = drawableObject->_rgb;
-        cairo_set_source_rgb(cr, r, g, b);
-        cairo_arc(cr, drawableObject->_position.first, drawableObject->_position.second, drawableObject->_radius, 0, 2 * G_PI);
-        cairo_fill(cr);
+        VisoUtils::drawFromDrawable(cr, drawableObject);
     }
     return FALSE;
 }
@@ -55,7 +63,7 @@ gboolean Visio::on_timeout(gpointer user_data) {
     GtkAllocation alloc;
     gtk_widget_get_allocation(self->_drawing_area, &alloc);
 
-    self->_spaceManager->update();    
+    self->_spaceManager->update(Time<double>(16.0));    
 
     // Redraw
     gtk_widget_queue_draw(self->_drawing_area);

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <gtk/gtk.h>
 
-#include "space.h"
+class SpaceManger;
 using namespace std;
 
 class Visio
@@ -23,4 +23,5 @@ private:
     static gboolean on_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data);
     static gboolean on_timeout(gpointer user_data);
 };
+
 #endif //VISIO_H
