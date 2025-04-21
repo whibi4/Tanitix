@@ -47,8 +47,9 @@ void SpaceManger::execute() {
         {"centerY", 300},
         {"angularVelocity", 0.005}
     });
-    object = new PhysicalObject(initialPosition, motion->getMotionFunction());
+    object = new PhysicalObject(initialPosition, motion);
     addPhysicalObject(object);
+    motion= new Circular2DMotion();
     motion->configure({
         {"centerX", 300},
         {"centerY", 200},
@@ -56,18 +57,16 @@ void SpaceManger::execute() {
     });
 
     initialPosition = Vector2D<double>(400,70);
-    object = new PhysicalObject(initialPosition, motion->getMotionFunction());
+    object = new PhysicalObject(initialPosition, motion);
     addPhysicalObject(object);
-    delete motion;
 
     motion= new Linear2DMotion();
     initialPosition = Vector2D<double>(0,0);
     motion->configure({
         {"velocity", 0.1}
     });
-    object = new PhysicalObject(initialPosition, motion->getMotionFunction());
+    object = new PhysicalObject(initialPosition, motion);
     addPhysicalObject(object);
-    delete motion;
 };
 
 void SpaceManger::collusionTreatement() {
@@ -82,8 +81,10 @@ void SpaceManger::collusionTreatement() {
             if (distance <= 100) {
                 obj1->makeRED();
                 obj2->makeRED();
-                obj1->updateMotion(motion->getMotionFunction());
-                obj2->updateMotion(motion->getMotionFunction());
+                obj1->getMotion()->reverseMotion();
+                obj2->getMotion()->reverseMotion();
+                // obj1->updateMotion(motion);
+                // obj2->updateMotion(motion);
             }
         };
     }
