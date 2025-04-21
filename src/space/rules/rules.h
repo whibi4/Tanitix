@@ -12,7 +12,7 @@ class Motion2D {
         virtual ~Motion2D() = default;
         virtual void configure(const std::unordered_map<std::string, double>& params) = 0;
         virtual void reverseMotion() = 0;
-        std::function<Vector2D<double>(Time<double>, Vector2D<double>)> getMotionFunction() {return _motionFunction;};
+        virtual std::function<Vector2D<double>(Time<double>, Vector2D<double>)> getMotionFunction() {return _motionFunction;};
     protected:
         std::function<Vector2D<double>(Time<double>, Vector2D<double>)> _motionFunction;
 };
