@@ -1,6 +1,6 @@
 # Define the object sources as a list
 set(srcs
-    ${CMAKE_CURRENT_SOURCE_DIR}/motions2D.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Fields.cpp
 )
 # Add library with proper expansion of the list
 add_library(lib_rules_s STATIC

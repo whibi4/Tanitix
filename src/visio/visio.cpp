@@ -63,7 +63,7 @@ gboolean Visio::on_timeout(gpointer user_data) {
     GtkAllocation alloc;
     gtk_widget_get_allocation(self->_drawing_area, &alloc);
 
-    self->_spaceManager->update(Time<double>(16.0));    
+    self->_spaceManager->update(Time<double>(16.0, false));    
 
     // Redraw
     gtk_widget_queue_draw(self->_drawing_area);
