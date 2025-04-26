@@ -32,12 +32,12 @@ template<typename T>
 class LinearField: public Field<T>{
     public:
         LinearField(T forceX, T forceY) {
-            this->_fieldComponents.push_back(forceX);
-            this->_fieldComponents.push_back(forceY);
+            Field<T>::_fieldComponents.push_back(forceX);
+            Field<T>::_fieldComponents.push_back(forceY);
         };
         ~LinearField()= default;
         Vector2D<T> calculateForce(Vector2D<T> pos, Vector2D<T> vel, Time<T> time) override {
-            return Vector2D<T>(this->_fieldComponents[0],this->_fieldComponents[1]);
+            return Vector2D<T>(Field<T>::_fieldComponents[0],Field<T>::_fieldComponents[1]);
         };
 };
 

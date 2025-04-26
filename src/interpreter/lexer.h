@@ -3,8 +3,33 @@
 #include <string>
 #include <vector>
 
-enum class TokenType {
-    Add, Loop, InitialX, InitialY, Motion, String, Identifier, Set, Number, Increase, LBrace, RBrace, EndOfFile, Unknown
+enum class TokenType
+{
+    add_field,
+    identifier,
+    semicolon,
+    add_object,
+    set_object_prop,
+    initial_position,
+    left_parenthesis,
+    comma,
+    right_parenthesis,
+    initial_velocity,
+    set_variable,
+    type,
+    string_as_type,
+    number_as_type,
+    value,
+    string_as_value,
+    number_as_value,
+    double_plus,
+    double_minus,
+    loop,
+    left_brace,
+    right_brace,
+    comment,
+    EndOfFile,
+    unknown
 };
 struct Token {
     TokenType type;
@@ -20,16 +45,24 @@ public:
 private:
     std::string _source;
     size_t _pos;
+    char peek();
+    char advance();
+    void skipWhitespace();
+    void skipComments();
+    Token identifier(bool startWithUnderscore = false);
 };
 /*
-    it's dummy for now but i will make it better i promise 
-    Example :
-        add 50 300 circulare 300 400 0.005
-        set x 0
-        loop 20 {
-            x += 10
-            add x x circulare x x 0.005
-        }
- */
+        code example:
+        #comments
+        add_field _<fieldName: string>; // to be set later
+        add_object _<objectName: string>;
+        set_object_prop <objectName: string> initial_position (<objectX: double>, <objectY: double>) ;
+        set_object_prop <objectName: string> initial_velocity (<objectX: double>, <objectY: double>);
+        set_variable <VariableName: string> type <type: string/number> value <value: string/number> ;
+        <VariableName: string>++ <value: string/number>;
+        <VariableName: string>-- <value: number>;
+        loop <nmbrOfLoop: number> {
 
+        };
+ */
 #endif //LEXER_H
