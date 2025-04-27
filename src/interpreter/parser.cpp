@@ -11,17 +11,22 @@ bool Parser::match(TokenType type) {
 std::unique_ptr<Statement> Parser::parseStatement() {
     if (match(TokenType::set_variable)) {
         std::string nameTkn = advance().value;
-        std::string typeTkn = advance().value;
-        VariableType variableType;
-        if (!typeTkn.compare("string")) variableType = VariableType::STRING;
-        if (!typeTkn.compare("number")) variableType = VariableType::NUM;
-        if (variableType == VariableType::STRING) {
-            std::string valueTkn = advance().value;
-            return std::make_unique<SetVariableStatement<std::string>>(nameTkn, variableType, valueTkn);
-        } else if (variableType == VariableType::NUM) {
-            double val = std::stoi(advance().value);
-            return std::make_unique<SetVariableStatement<double>>(nameTkn, variableType, val);
-        }
+        TokenType typeTkn = advance().type;
+        SetVariableStatement::VariableType variableType;
+        if (typeTkn == TokenType::string_as_type) variableType = SetVariableStatement::VariableType::STRING;
+        if (typeTkn == TokenType::number_as_type) variableType = SetVariableStatement::VariableType::NUM;
+        advance();
+        return std::make_unique<SetVariableStatement>(nameTkn, variableType, peek().value, (peek().type == TokenType::identifier));
     }
+    advance();
     return nullptr;
+}
+std::vector<std::unique_ptr<Statement>> Parser::parse() {
+    std::vector<std::unique_ptr<Statement>> program;
+    while (peek().type != TokenType::EndOfFile) {
+        std::cout<<"DBGgg1\n";
+        auto stmt = parseStatement();
+        if (stmt) program.push_back(std::move(stmt));
+    }
+    return program;
 }

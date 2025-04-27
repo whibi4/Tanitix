@@ -1,9 +1,9 @@
+#ifndef FIELDS_H
+#define FIELDS_H
 #include "maths.h"
 #include "physics.h"
 #include <functional>
 #include <vector>
-#ifndef FIELDS_H
-#define FIELDS_H
 template<typename T>
 //Field mother class
 class Field{
@@ -41,4 +41,4 @@ class LinearField: public Field<T>{
         };
 };
 
-#endif
+#endif  //FIELDS_H
