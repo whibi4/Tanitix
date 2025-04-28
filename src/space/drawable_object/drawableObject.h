@@ -12,7 +12,7 @@ class DrawableObject {
         const double& getRadius() const {return _radius;};
     private:
         DrawableObject(double r, double g, double b, Vector2D<double> position, double radius): _rgb(r, g, b), _position(position), _radius(radius) {};
-        DrawableObject(Vector2D<double> position): _rgb(0.0,0.0,0.0),  _position(position), _radius(50) {};
+        DrawableObject(Vector2D<double> position, double radius): _rgb(0.0,0.0,0.0),  _position(position), _radius(radius) {};
         std::tuple<double, double, double> _rgb;
         Vector2D<double>                   _position;
         double                             _radius;

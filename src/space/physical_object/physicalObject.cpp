@@ -3,14 +3,16 @@
 #include "physicalObject.h"
 using namespace std;
 
-PhysicalObject::PhysicalObject(Vector2D<double> initialPosition, Vector2D<double> initialVelocity) {
+PhysicalObject::PhysicalObject(Vector2D<double> initialPosition, Vector2D<double> initialVelocity, Weight<double> weight, double radius){
     _currentPosition = initialPosition;
     _currentVelocity = initialVelocity;
     _currentAcceleration = Vector2D<double>(0,0);
+    _weight = weight;
+    _radius = radius;
     EmptyField<double>* emptyField = new EmptyField<double>();
     _fields.push_back(emptyField);
 //Create new drawable object
-_drawableObject = new DrawableObject(initialPosition);
+_drawableObject = new DrawableObject(initialPosition, radius);
 };
 PhysicalObject::~PhysicalObject() {
     delete _drawableObject;

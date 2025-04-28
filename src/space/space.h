@@ -13,7 +13,7 @@ class SpaceManger {
         void update(Time<double> deltaT);
         std::vector<DrawableObject*> getSpaceScene();
     private:
-        void addPhysicalObject(PhysicalObject* phObj) {_objects.push_back(phObj);};
+        int addPhysicalObject(PhysicalObject* phObj);
         void collusionTreatement();
         std::vector<PhysicalObject*> _objects;
 };       
