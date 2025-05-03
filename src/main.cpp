@@ -3,33 +3,35 @@
 #include "lexer.h"
 #include "parser.h"
 #include "interpreter.h"
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
 
 int main(int argc, char** argv) {
+    const char* file = std::getenv("CODE_PATH");
+    std::ifstream inputFile(file);
+    if (!inputFile) {
+        std::cerr << "Error: Cannot open file " << argv[1] << "\n";
+        return 1;
+    }
+    std::ostringstream buffer;
+    buffer << inputFile.rdbuf(); 
+    std::string content = buffer.str();
 
-#if 0
-    std::string script = R"(
-        setVariable _x number 10;
-    )";
+    SpaceManger spaceManger;
     try {
-        std::cout<<"DBG1\n";
-        Lexer lexer(script);
-        std::cout<<"DBG2\n";
+        Lexer lexer(content);
         auto tokens = lexer.tokenize();
-        std::cout<<"DBG3\n";
         Parser parser(tokens);
-        std::cout<<"DBG4\n";
         const auto& program = parser.parse();
-        std::cout<<"DBG5\n";
         Interpreter interpreter;
-        std::cout<<"DBG6\n";
-        interpreter.run(program);
-        std::cout<<"DBG7\n";
+        interpreter.run(program, &spaceManger);
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
     }
-#endif
-    SpaceManger spaceManger;
-    spaceManger.execute();
+    //uncomment this line to get back to ol behivour
+    //spaceManger.execute();
     Visio visio(&spaceManger);
     return visio.run(argc, argv);
 }

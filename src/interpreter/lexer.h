@@ -2,9 +2,9 @@
 #define LEXER_H
 #include <string>
 #include <vector>
-
 enum class TokenType
 {
+    number_as_value,
     add_field,
     identifier,
     semicolon,
@@ -16,14 +16,11 @@ enum class TokenType
     right_parenthesis,
     initial_velocity,
     set_variable,
-    type,
     string_as_type,
     number_as_type,
-    value,
     string_as_value,
-    number_as_value,
-    double_plus,
-    double_minus,
+    plus,
+    minus,
     loop,
     left_brace,
     right_brace,
@@ -31,6 +28,7 @@ enum class TokenType
     EndOfFile,
     unknown
 };
+
 struct Token {
     TokenType type;
     std::string value;
@@ -47,20 +45,21 @@ private:
     size_t _pos;
     char peek();
     char advance();
-    void skipWhitespace();
+    void skipWhitespaceAndBl();
     void skipComments();
-    Token identifier(bool startWithUnderscore = false);
+    Token treatString();
+    Token identifier();
 };
 /*
         code example:
         #comments
-        add_field _<fieldName: string>; // to be set later
-        add_object _<objectName: string>;
-        set_object_prop <objectName: string> initial_position (<objectX: double>, <objectY: double>) ;
-        set_object_prop <objectName: string> initial_velocity (<objectX: double>, <objectY: double>);
-        set_variable <VariableName: string> type <type: string/number> value <value: string/number> ;
-        <VariableName: string>++ <value: string/number>;
-        <VariableName: string>-- <value: number>;
+        addField <fieldName: string>; // to be set later
+        addObject <objectName: string>;
+        setObjectProp <objectName: string> initialPosition (<objectX: double>, <objectY: double>) ;
+        setObjectProp <objectName: string> initialVelocity (<objectX: double>, <objectY: double>);
+        setVariable <VariableName: string> type <type: string/number> value <value: string/number> ;
+        <VariableName: string>+ <value: string/number>;
+        <VariableName: string>- <value: number>;
         loop <nmbrOfLoop: number> {
 
         };

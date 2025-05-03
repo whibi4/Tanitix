@@ -1,0 +1,12 @@
+addObject obj;
+setObjectProp obj initialPosition(400,300);
+setObjectProp obj initialVelocity(400,20);
+addObject obj2;
+setObjectProp obj2 initialPosition(300,200);
+setObjectProp obj2 initialVelocity(400,0);
+addObject obj3;
+setObjectProp obj3 initialPosition(100,250);
+setObjectProp obj3 initialVelocity(600,0);
+addObject obj4;
+setObjectProp obj4 initialPosition(200,200);
+setObjectProp obj4 initialVelocity(20,10);
