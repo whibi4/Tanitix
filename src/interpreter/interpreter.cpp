@@ -13,7 +13,7 @@ void SetVariableStatement::execute(Context& ctx) {
     if (it.first) {
         if (_type == VariableType::NUM) {
             double value = std::get<double>(*it.second);
-            ctx.add(_variableName, value);
+            ctx.add(_variableName, _sign*value);
         } else if (_type == VariableType::STRING) {
             std::string value = std::get<std::string>(*it.second);
             ctx.add(_variableName, value);
@@ -21,7 +21,7 @@ void SetVariableStatement::execute(Context& ctx) {
     } else {
         if (_type == VariableType::NUM) {
             double value = std::stod(_value);
-            ctx.add(_variableName, value);
+            ctx.add(_variableName, _sign*value);
         } else if (_type == VariableType::STRING) {
             ctx.add(_variableName, _value);
         }
@@ -37,26 +37,26 @@ void SetObjectPropStatement::execute(Context& ctx) {
         double xVal, yVal;
         try {
             size_t pos;
-            xVal = std::stod(_values[x_index], &pos);
-            if (pos != _values[x_index].length())
-                xVal = std::get<double>(*ctx.get(_values[x_index]).second);
+            xVal = std::stod(_values[x_index].second, &pos);
+            if (pos != _values[x_index].second.length())
+                xVal = std::get<double>(*ctx.get(_values[x_index].second).second);
         } catch (...) {
-            xVal = std::get<double>(*ctx.get(_values[x_index]).second);
+            xVal = std::get<double>(*ctx.get(_values[x_index].second).second);
         }
         try {
             size_t pos;
-            yVal = std::stod(_values[y_index], &pos);
-            if (pos != _values[y_index].length()) 
-                yVal = std::get<double>(*ctx.get(_values[y_index]).second);
+            yVal = std::stod(_values[y_index].second, &pos);
+            if (pos != _values[y_index].second.length()) 
+                yVal = std::get<double>(*ctx.get(_values[y_index].second).second);
         } catch (...) {
-            yVal = std::get<double>(*ctx.get(_values[y_index]).second);
+            yVal = std::get<double>(*ctx.get(_values[y_index].second).second);
         };
         if (_type == SetObjectPropStatement::PropType::POS) {
-            std::get<Object>(*it.second)._initialPositionX = xVal;
-            std::get<Object>(*it.second)._initialPositionY = yVal;
+            std::get<Object>(*it.second)._initialPositionX = _values[x_index].first*xVal;
+            std::get<Object>(*it.second)._initialPositionY = _values[y_index].first*yVal;
         } else if (_type == SetObjectPropStatement::PropType::VELOC) {
-            std::get<Object>(*it.second)._initialVelocityX = xVal;
-            std::get<Object>(*it.second)._initialVelocityY = yVal;
+            std::get<Object>(*it.second)._initialVelocityX = _values[x_index].first*xVal;
+            std::get<Object>(*it.second)._initialVelocityY = _values[y_index].first*yVal;
         }
     }
 };

@@ -69,7 +69,7 @@ void SpaceManger::configureObject(double posX, double posY, double VelX, double 
     LinearField<double> *field = new LinearField<double>(0, 0);
     Vector2D<double> initialPosition = Vector2D<double>(posX, posY);
     Vector2D<double> initialVelocity = Vector2D<double>(VelX, VelY);
-    double mass = random_int(10, 50);
+    double mass = 30;
     double radius = mass;
     PhysicalObject *object = new PhysicalObject(initialPosition, initialVelocity, mass, radius);
     if (addPhysicalObject(object)==-1) {

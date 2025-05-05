@@ -66,15 +66,17 @@ class Statement {
 class SetVariableStatement : public Statement {
     public:
         enum class VariableType {STRING, NUM};
-        explicit SetVariableStatement(std::string variableName, VariableType type, std::string value) : 
+        explicit SetVariableStatement(std::string variableName, VariableType type, std::string value, double sign) : 
                         _variableName(std::move(variableName)), 
                         _type(type), 
-                        _value(std::move(value)){};
+                        _value(std::move(value)),
+                        _sign(sign){};
         void execute(Context &ctx) override;
     private:
         std::string     _variableName;
         VariableType    _type;
         std::string     _value;
+        double          _sign;
 
 };
 class AddObjectStatement : public Statement {
@@ -94,21 +96,21 @@ class SetObjectPropStatement : public Statement {
     public:
         enum class PropType {POS, VELOC};
 
-        explicit SetObjectPropStatement(std::string objectName, const std::vector<std::string>& values, PropType propType) : 
+        explicit SetObjectPropStatement(std::string objectName, const std::vector<std::pair<double, std::string>>& values, PropType propType) : 
                                     _objectName(std::move(objectName)),
                                     _values(std::move(values)),
                                     _type(propType){
                                         std::cout<<"SET_PROP"<<_objectName<<" : [";
                                         for (auto v : _values) {
-                                            std::cout<<v<<" - ";
+                                            std::cout<<v.first<<v.second<<" - ";
                                         }
                                         std::cout<<"]\n";
                                     };
         void execute(Context &ctx) override;
     private:
-        std::string               _objectName;
-        std::vector<std::string>  _values;
-        PropType                  _type;
+        std::string                                     _objectName;
+        std::vector<std::pair<double, std::string>>     _values;
+        PropType                                        _type;
 };
 
 

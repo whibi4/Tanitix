@@ -12,12 +12,14 @@
 #setObjectProp obj4 initialVelocity(20,-10);
 # 4 OBJECTS IN LINEAR MOTION 
 # RANDOM WHEIGHT AND MASS
+setVariable x number -30;
+setVariable y number -x;
 addObject obj5;
 setObjectProp obj5 initialPosition(500,200);
-setObjectProp obj5 initialVelocity(-30,0);
+setObjectProp obj5 initialVelocity(-y,0);
 addObject obj6;
 setObjectProp obj6 initialPosition(0,200);
-setObjectProp obj6 initialVelocity(+30,0);
+setObjectProp obj6 initialVelocity(y,0);
 addObject obj7;
 setObjectProp obj7 initialPosition(100,200);
 setObjectProp obj7 initialVelocity(+30,0);

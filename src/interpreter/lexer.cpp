@@ -16,7 +16,7 @@ void Lexer::skipWhitespaceAndBl() {
     while (isspace(peek()) || peek() == '\n') advance();
 }
 void Lexer::skipComments() {
-    while (peek()!='\n') advance();
+    while (peek()!='\n' && peek()!='\0') advance();
 }
 Token Lexer::treatString() {
     std::string value;

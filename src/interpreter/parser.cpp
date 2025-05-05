@@ -76,10 +76,12 @@ std::unique_ptr<Statement> Parser::parseStatement(const std::vector<const Token*
         if (variableTypeTkn == TokenType::string_as_type) variableType = SetVariableStatement::VariableType::STRING;
         if (variableTypeTkn == TokenType::number_as_type) variableType = SetVariableStatement::VariableType::NUM;
         std::string value = instrection[3]->value;
+        double sign = 1;
         if (instrection[3]->type == TokenType::minus || instrection[3]->type == TokenType::plus) {
-            value+= instrection[4]->value;
+            sign = (instrection[3]->type == TokenType::minus)?-1:1;
+            value= instrection[4]->value;
         }
-        return std::make_unique<SetVariableStatement>(variableName, variableType, value);
+        return std::make_unique<SetVariableStatement>(variableName, variableType, value, sign);
         break;
     }
     case TokenType::add_object: {
@@ -93,20 +95,23 @@ std::unique_ptr<Statement> Parser::parseStatement(const std::vector<const Token*
         SetObjectPropStatement::PropType propType;
         if (propTypeTkn == TokenType::initial_position) propType = SetObjectPropStatement::PropType::POS;
         if (propTypeTkn == TokenType::initial_velocity) propType = SetObjectPropStatement::PropType::VELOC;
-        std::vector<std::string> props;
+        std::vector<std::pair<double, std::string>> props;
         if (propType == SetObjectPropStatement::PropType::POS || propType ==SetObjectPropStatement::PropType::VELOC) {
             size_t index_instruction = 3 + 1; // assuming 3rd index is '('
             std::string value ="";
+            double sign = 1;
             while (instrection[index_instruction]->type!=TokenType::right_parenthesis) {
                 if(instrection[index_instruction]->type == TokenType::comma) {
-                    props.push_back(value);
+                    props.push_back(std::make_pair(sign,value));
                     value = "";
+                } else if (instrection[index_instruction]->type == TokenType::minus || instrection[index_instruction]->type == TokenType::plus) {
+                    sign = (instrection[index_instruction]->type == TokenType::minus)?-1:1;
                 } else {
                     value+=instrection[index_instruction]->value;
                 }
                 index_instruction++;
             }
-            props.push_back(value);
+            props.push_back(std::make_pair(sign,value));
         }
         return std::make_unique<SetObjectPropStatement>(objectName, props, propType);
         break;
