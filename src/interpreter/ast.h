@@ -97,7 +97,13 @@ class SetObjectPropStatement : public Statement {
         explicit SetObjectPropStatement(std::string objectName, const std::vector<std::string>& values, PropType propType) : 
                                     _objectName(std::move(objectName)),
                                     _values(std::move(values)),
-                                    _type(propType){};
+                                    _type(propType){
+                                        std::cout<<"SET_PROP"<<_objectName<<" : [";
+                                        for (auto v : _values) {
+                                            std::cout<<v<<" - ";
+                                        }
+                                        std::cout<<"]\n";
+                                    };
         void execute(Context &ctx) override;
     private:
         std::string               _objectName;

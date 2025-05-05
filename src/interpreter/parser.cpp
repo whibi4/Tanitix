@@ -65,44 +65,67 @@ bool Parser::match(TokenType type) {
     if (peek().type == type) { advance(); return true; }
     return false;
 }
-std::unique_ptr<Statement> Parser::parseStatement() {
-    if (match(TokenType::set_variable)) {
-        std::string nameTkn = advance().value;
-        TokenType typeTkn = advance().type;
+std::unique_ptr<Statement> Parser::parseStatement(const std::vector<const Token*>& instrection) {
+    if (instrection.size() == 0) return nullptr;
+    switch (instrection[0]->type)
+    {
+    case TokenType::set_variable: {
+        std::string variableName = instrection[1]->value;
+        TokenType variableTypeTkn = instrection[2]->type;
         SetVariableStatement::VariableType variableType;
-        if (typeTkn == TokenType::string_as_type) variableType = SetVariableStatement::VariableType::STRING;
-        if (typeTkn == TokenType::number_as_type) variableType = SetVariableStatement::VariableType::NUM;
-        return std::make_unique<SetVariableStatement>(nameTkn, variableType, advance().value);
-    } else if (match(TokenType::add_object)) {
-        std::string objectName = advance().value;
+        if (variableTypeTkn == TokenType::string_as_type) variableType = SetVariableStatement::VariableType::STRING;
+        if (variableTypeTkn == TokenType::number_as_type) variableType = SetVariableStatement::VariableType::NUM;
+        std::string value = instrection[3]->value;
+        if (instrection[3]->type == TokenType::minus || instrection[3]->type == TokenType::plus) {
+            value+= instrection[4]->value;
+        }
+        return std::make_unique<SetVariableStatement>(variableName, variableType, value);
+        break;
+    }
+    case TokenType::add_object: {
+        std::string objectName = instrection[1]->value;
         return std::make_unique<AddObjectStatement>(objectName);
-    } else if (match(TokenType::set_object_prop)) {
-        std::string objectName = advance().value;
-        TokenType typeTkn = advance().type;
+        break;
+    }
+    case TokenType::set_object_prop: {
+        std::string objectName = instrection[1]->value;
+        TokenType propTypeTkn = instrection[2]->type;
         SetObjectPropStatement::PropType propType;
-        if (typeTkn == TokenType::initial_position) propType = SetObjectPropStatement::PropType::POS;
-        if (typeTkn == TokenType::initial_velocity) propType = SetObjectPropStatement::PropType::VELOC;
+        if (propTypeTkn == TokenType::initial_position) propType = SetObjectPropStatement::PropType::POS;
+        if (propTypeTkn == TokenType::initial_velocity) propType = SetObjectPropStatement::PropType::VELOC;
         std::vector<std::string> props;
         if (propType == SetObjectPropStatement::PropType::POS || propType ==SetObjectPropStatement::PropType::VELOC) {
-            while (advance().type!=TokenType::right_parenthesis) {
-                if(peek().type == TokenType::comma) advance();
-                props.push_back(peek().value);
+            size_t index_instruction = 3 + 1; // assuming 3rd index is '('
+            std::string value ="";
+            while (instrection[index_instruction]->type!=TokenType::right_parenthesis) {
+                if(instrection[index_instruction]->type == TokenType::comma) {
+                    props.push_back(value);
+                    value = "";
+                } else {
+                    value+=instrection[index_instruction]->value;
+                }
+                index_instruction++;
             }
+            props.push_back(value);
         }
         return std::make_unique<SetObjectPropStatement>(objectName, props, propType);
-
+        break;
+    }
+    default:
+        break;
     }
     return nullptr;
 }
 std::vector<std::unique_ptr<Statement>> Parser::parse() {
     std::vector<std::unique_ptr<Statement>> program;
     while (peek().type != TokenType::EndOfFile) {
-        match(TokenType::semicolon);
-        if(peek().type == TokenType::unknown) {
-            std::cout<<"DBG_crtcl : "<<peek().value<<" : "<<tokenTypeToString(peek().type)<<std::endl;
-            advance();
+        if (peek().type == TokenType::unknown) {advance(); continue;}
+        std::vector<const Token*> instrection;
+        while (peek().type != TokenType::semicolon) {
+            instrection.push_back(&advance());
         }
-        auto stmt = parseStatement();
+        advance();
+        auto stmt = parseStatement(instrection);
         if (stmt) program.push_back(std::move(stmt));
     }
     return program;

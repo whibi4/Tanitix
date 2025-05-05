@@ -9,5 +9,7 @@ $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 run:
 	GDK_BACKEND=x11 CODE_PATH=./simpleCode.tx ./$(BUILD_DIR)/$(TARGET)
+run_gdb:
+	GDK_BACKEND=x11 CODE_PATH=./simpleCode.tx gdb ./$(BUILD_DIR)/$(TARGET)
 clean:
 	rm -rf $(BUILD_DIR)

@@ -66,7 +66,7 @@ void SpaceManger::execute() {
     };
 };
 void SpaceManger::configureObject(double posX, double posY, double VelX, double VelY) {
-    LinearField<double> *field = new LinearField<double>(::random_int(-400, 400), ::random_int(-400, 400));
+    LinearField<double> *field = new LinearField<double>(0, 0);
     Vector2D<double> initialPosition = Vector2D<double>(posX, posY);
     Vector2D<double> initialVelocity = Vector2D<double>(VelX, VelY);
     double mass = random_int(10, 50);

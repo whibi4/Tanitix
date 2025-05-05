@@ -14,7 +14,7 @@ class Parser {
         const Token& peek();
         const Token& advance();
         bool match(TokenType);
-        std::unique_ptr<Statement> parseStatement();
+        std::unique_ptr<Statement> parseStatement(const std::vector<const Token*>&);
     };
 
 #endif //PARSER_H
